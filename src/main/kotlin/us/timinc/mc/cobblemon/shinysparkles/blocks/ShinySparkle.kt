@@ -22,9 +22,9 @@ import us.timinc.mc.cobblemon.shinysparkles.store.player.SparklesData
 import kotlin.random.Random.Default.nextFloat
 
 
-class ShinySparkle : Block(
+class ShinySparkle : BlockWithEntity(
     Settings.copy(Blocks.BEDROCK).dropsNothing().ticksRandomly().noBlockBreakParticles()
-), BlockEntityProvider {
+) {
     companion object {
         val PARTICLE = DustParticleEffect(Vec3d.unpackRgb(0xDEDEDE).toVector3f(), 1.0F)
     }
