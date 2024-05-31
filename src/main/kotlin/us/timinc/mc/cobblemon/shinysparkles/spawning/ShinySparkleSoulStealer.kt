@@ -36,6 +36,7 @@ object ShinySparkleSoulStealer {
         } else if (world.getBlockState(pos.up(2)).block == Blocks.AIR) {
             pos.up(2)
         } else {
+
             return
         }
 
