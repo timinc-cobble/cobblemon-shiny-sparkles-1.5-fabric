@@ -29,15 +29,11 @@ object ShinySparkleSoulStealer {
         val world = spawnEvent.ctx.world
         val pos = spawnEvent.ctx.position
 
-        val targetPos: BlockPos = if (world.getBlockState(pos).block == Blocks.WATER) {
-            pos
-        } else if (world.getBlockState(pos.up()).block == Blocks.AIR) {
-            pos.up()
-        } else if (world.getBlockState(pos.up(2)).block == Blocks.AIR) {
-            pos.up(2)
-        } else {
-
-            return
+        val targetPos: BlockPos = when {
+            world.getBlockState(pos).block == Blocks.WATER -> pos
+            world.getBlockState(pos.up()).block == Blocks.AIR -> pos.up()
+            world.getBlockState(pos.up(2)).block == Blocks.AIR -> pos.up(2)
+            else -> return
         }
 
         world.setBlockState(targetPos, ShinySparklesBlocks.SHINY_SPARKLE.defaultState)
@@ -45,6 +41,7 @@ object ShinySparkleSoulStealer {
         val entity = world.getBlockEntity(targetPos) as ShinySparkleBlockEntity
         entity.player = playerUuid
         entity.pokemon = pokemon.createPokemonProperties(PokemonPropertyExtractor.ALL)
+        entity.life = 3
         prevSparklesData.pos = targetPos
         println(targetPos)
         spawnEvent.cancel()

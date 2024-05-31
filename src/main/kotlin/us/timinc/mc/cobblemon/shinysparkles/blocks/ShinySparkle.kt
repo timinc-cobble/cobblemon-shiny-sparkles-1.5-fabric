@@ -1,10 +1,14 @@
 package us.timinc.mc.cobblemon.shinysparkles.blocks
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import net.minecraft.block.*
+import net.minecraft.block.BlockState
+import net.minecraft.block.BlockWithEntity
+import net.minecraft.block.Blocks
+import net.minecraft.block.ShapeContext
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.particle.DustParticleEffect
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
@@ -34,6 +38,22 @@ class ShinySparkle : BlockWithEntity(
         spawnParticles(world, blockPos)
     }
 
+    override fun randomTick(blockState: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
+        super.randomTick(blockState, world, pos, random)
+
+        val blockEntity = world.getBlockEntity(pos) as ShinySparkleBlockEntity
+        val player = blockEntity.player?.let { world.getPlayerByUuid(it) }
+        if (player == null || SparklesData.getFromPlayer(player).pos != pos) {
+            world.setBlockState(pos, Blocks.AIR.defaultState)
+            return
+        }
+
+        blockEntity.life--
+        if (blockEntity.life == 0) {
+            world.setBlockState(pos, Blocks.AIR.defaultState)
+        }
+    }
+
     override fun hasRandomTicks(blockState: BlockState): Boolean {
         return true
     }
@@ -47,12 +67,6 @@ class ShinySparkle : BlockWithEntity(
         context: ShapeContext?
     ): VoxelShape {
         return VoxelShapes.cuboid(0.15, 0.15, 0.15, 0.85, 0.85, 0.85)
-    }
-
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("Deprecated in Java")
-    override fun getRenderType(state: BlockState?): BlockRenderType {
-        return BlockRenderType.INVISIBLE
     }
 
     private fun spawnParticles(world: World, blockPos: BlockPos) {
@@ -93,7 +107,8 @@ class ShinySparkle : BlockWithEntity(
         val blockPlayer = (blockEntity.player)
         if (player != blockPlayer) {
             if (!world.isClient) {
-                playerEntity.sendMessage(Text.literal("That's not yours."))
+                val playerName = world.getPlayerByUuid(blockPlayer)?.name ?: Text.translatable("shinysparkles.msg.emptyperson")
+                playerEntity.sendMessage(Text.translatable("shinysparkles.block.sparkle.msg.notyours", playerName))
             }
             return ActionResult.FAIL
         }
@@ -107,7 +122,6 @@ class ShinySparkle : BlockWithEntity(
             val spawned = PokemonEntity(world, properties.create())
             spawned.setPosition(blockPos.toCenterPos())
             world.spawnEntity(spawned)
-            println(spawned.pos)
         }
 
         world.setBlockState(blockPos, Blocks.AIR.defaultState)

@@ -12,6 +12,7 @@ class ShinySparkleBlockEntity(pos: BlockPos?, state: BlockState?) :
     BlockEntity(BlockEntities.SHINY_SPARKLE_BE, pos, state) {
     var player: UUID? = null
     var pokemon: PokemonProperties? = null
+    var life: Int = 0
 
     override fun writeNbt(nbt: NbtCompound) {
         nbt.putString("player", player.toString())
