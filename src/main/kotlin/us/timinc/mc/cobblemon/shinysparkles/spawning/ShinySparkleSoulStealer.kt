@@ -8,7 +8,7 @@ import net.minecraft.block.Blocks
 import net.minecraft.util.math.BlockPos
 import us.timinc.mc.cobblemon.shinysparkles.blocks.ShinySparklesBlocks
 import us.timinc.mc.cobblemon.shinysparkles.blocks.blockentities.ShinySparkleBlockEntity
-import us.timinc.mc.cobblemon.shinysparkles.store.player.ShinyPos
+import us.timinc.mc.cobblemon.shinysparkles.store.player.SparklesData
 
 object ShinySparkleSoulStealer {
     fun possiblyStealSoul(spawnEvent: SpawnEvent<PokemonEntity>) {
@@ -16,8 +16,8 @@ object ShinySparkleSoulStealer {
         val playerUuid = (spawnEvent.ctx.spawner as PlayerSpawner).uuid
         val player = spawnEvent.ctx.world.getPlayerByUuid(playerUuid) ?: return
 
-        val prevShinyPos = ShinyPos.getFromPlayer(player)
-        if (prevShinyPos.pos != null) {
+        val prevSparklesData = SparklesData.getFromPlayer(player)
+        if (prevSparklesData.pos != null) {
             println("Greedy")
             spawnEvent.cancel()
             return
@@ -44,7 +44,7 @@ object ShinySparkleSoulStealer {
         val entity = world.getBlockEntity(targetPos) as ShinySparkleBlockEntity
         entity.player = playerUuid
         entity.pokemon = pokemon.createPokemonProperties(PokemonPropertyExtractor.ALL)
-        prevShinyPos.pos = targetPos
+        prevSparklesData.pos = targetPos
         println(targetPos)
         spawnEvent.cancel()
     }

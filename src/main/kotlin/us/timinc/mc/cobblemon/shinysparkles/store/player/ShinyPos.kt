@@ -6,13 +6,13 @@ import com.google.gson.JsonObject
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.math.BlockPos
 
-class ShinyPos : PlayerDataExtension {
+class SparklesData : PlayerDataExtension {
     companion object {
-        const val NAME = "shinyPos"
+        const val NAME = "sparkles"
 
-        fun getFromPlayer(player: PlayerEntity): ShinyPos {
+        fun getFromPlayer(player: PlayerEntity): SparklesData {
             val playerData = Cobblemon.playerData.get(player)
-            return playerData.extraData.getOrPut(NAME) { ShinyPos() } as ShinyPos
+            return playerData.extraData.getOrPut(NAME) { SparklesData() } as SparklesData
         }
     }
 

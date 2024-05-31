@@ -18,7 +18,7 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import us.timinc.mc.cobblemon.shinysparkles.blocks.blockentities.ShinySparkleBlockEntity
-import us.timinc.mc.cobblemon.shinysparkles.store.player.ShinyPos
+import us.timinc.mc.cobblemon.shinysparkles.store.player.SparklesData
 import kotlin.random.Random.Default.nextFloat
 
 
@@ -100,8 +100,8 @@ class ShinySparkle : Block(
 
         val properties = blockEntity.pokemon ?: return ActionResult.PASS
 
-        val prevShinyPos = ShinyPos.getFromPlayer(playerEntity)
-        prevShinyPos.pos = null
+        val prevSparklesData = SparklesData.getFromPlayer(playerEntity)
+        prevSparklesData.pos = null
 
         if (!world.isClient) {
             val spawned = PokemonEntity(world, properties.create())
