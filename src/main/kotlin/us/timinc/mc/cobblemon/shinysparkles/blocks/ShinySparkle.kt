@@ -1,7 +1,14 @@
 package us.timinc.mc.cobblemon.shinysparkles.blocks
 
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.block.*
+import net.minecraft.block.entity.BlockEntity
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.particle.DustParticleEffect
+import net.minecraft.text.Text
+import net.minecraft.util.ActionResult
+import net.minecraft.util.Hand
+import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
@@ -10,12 +17,14 @@ import net.minecraft.util.shape.VoxelShape
 import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
+import us.timinc.mc.cobblemon.shinysparkles.blocks.blockentities.ShinySparkleBlockEntity
+import us.timinc.mc.cobblemon.shinysparkles.store.player.ShinyPos
 import kotlin.random.Random.Default.nextFloat
 
 
 class ShinySparkle : Block(
-    Settings.copy(Blocks.TORCH).dropsNothing().ticksRandomly().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque()
-) {
+    Settings.copy(Blocks.BEDROCK).dropsNothing().ticksRandomly().noBlockBreakParticles()
+), BlockEntityProvider {
     companion object {
         val PARTICLE = DustParticleEffect(Vec3d.unpackRgb(0xDEDEDE).toVector3f(), 1.0F)
     }
@@ -29,6 +38,7 @@ class ShinySparkle : Block(
         return true
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
     @Deprecated("Deprecated in Java")
     override fun getOutlineShape(
         state: BlockState?,
@@ -39,6 +49,7 @@ class ShinySparkle : Block(
         return VoxelShapes.cuboid(0.15, 0.15, 0.15, 0.85, 0.85, 0.85)
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
     @Deprecated("Deprecated in Java")
     override fun getRenderType(state: BlockState?): BlockRenderType {
         return BlockRenderType.INVISIBLE
@@ -62,5 +73,45 @@ class ShinySparkle : Block(
                 )
             }
         }
+    }
+
+    override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
+        return ShinySparkleBlockEntity(pos, state)
+    }
+
+    override fun onUse(
+        blockState: BlockState,
+        world: World,
+        blockPos: BlockPos,
+        playerEntity: PlayerEntity,
+        hand: Hand,
+        blockHitResult: BlockHitResult
+    ): ActionResult {
+        if (hand != Hand.MAIN_HAND) return ActionResult.PASS
+        val player = (playerEntity.uuid)
+        val blockEntity = (world.getBlockEntity(blockPos) as ShinySparkleBlockEntity)
+        val blockPlayer = (blockEntity.player)
+        if (player != blockPlayer) {
+            if (!world.isClient) {
+                playerEntity.sendMessage(Text.literal("That's not yours."))
+            }
+            return ActionResult.FAIL
+        }
+
+        val properties = blockEntity.pokemon ?: return ActionResult.PASS
+
+        val prevShinyPos = ShinyPos.getFromPlayer(playerEntity)
+        prevShinyPos.pos = null
+
+        if (!world.isClient) {
+            val spawned = PokemonEntity(world, properties.create())
+            spawned.setPosition(blockPos.toCenterPos())
+            world.spawnEntity(spawned)
+            println(spawned.pos)
+        }
+
+        world.setBlockState(blockPos, Blocks.AIR.defaultState)
+
+        return ActionResult.SUCCESS
     }
 }

@@ -8,8 +8,10 @@ import net.minecraft.registry.Registry
 import us.timinc.mc.cobblemon.shinysparkles.ShinySparkles.modResource
 
 object ShinySparklesBlocks {
+    val SHINY_SPARKLE = ShinySparkle()
+
     fun register() {
-        registerBlock("shiny_sparkle", ShinySparkle())
+        registerBlock("shiny_sparkle", SHINY_SPARKLE)
     }
 
     private fun registerBlock(name: String, block: Block) {
