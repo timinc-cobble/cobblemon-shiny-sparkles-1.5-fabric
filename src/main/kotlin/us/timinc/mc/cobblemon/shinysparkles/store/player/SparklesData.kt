@@ -1,6 +1,7 @@
 package us.timinc.mc.cobblemon.shinysparkles.store.player
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.storage.player.PlayerData
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtension
 import com.google.gson.JsonObject
 import net.minecraft.entity.player.PlayerEntity
@@ -12,7 +13,18 @@ class SparklesData : PlayerDataExtension {
 
         fun getFromPlayer(player: PlayerEntity): SparklesData {
             val playerData = Cobblemon.playerData.get(player)
+            return getFromPlayerData(playerData)
+        }
+
+        @Suppress("MemberVisibilityCanBePrivate")
+        fun getFromPlayerData(playerData: PlayerData): SparklesData {
             return playerData.extraData.getOrPut(NAME) { SparklesData() } as SparklesData
+        }
+
+        fun modifyForPlayer(player: PlayerEntity, modifier: (SparklesData) -> Unit) {
+            val playerData = Cobblemon.playerData.get(player)
+            modifier(getFromPlayerData(playerData))
+            Cobblemon.playerData.saveSingle(playerData)
         }
     }
 

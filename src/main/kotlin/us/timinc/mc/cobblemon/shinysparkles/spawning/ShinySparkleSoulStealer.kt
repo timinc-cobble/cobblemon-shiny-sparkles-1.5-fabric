@@ -42,7 +42,9 @@ object ShinySparkleSoulStealer {
         entity.player = playerUuid
         entity.pokemon = pokemon.createPokemonProperties(PokemonPropertyExtractor.ALL)
         entity.life = 3
-        prevSparklesData.pos = targetPos
+
+        SparklesData.modifyForPlayer(player) { it.pos = targetPos }
+
         println(targetPos)
         spawnEvent.cancel()
     }
