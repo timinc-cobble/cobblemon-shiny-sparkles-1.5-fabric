@@ -12,19 +12,25 @@ import us.timinc.mc.cobblemon.shinysparkles.store.player.SparklesData
 
 object ShinySparkleSoulStealer {
     fun possiblyStealSoul(spawnEvent: SpawnEvent<PokemonEntity>) {
+        val pokemon = spawnEvent.entity.pokemon
+        if (!pokemon.shiny) return
+
         if (spawnEvent.ctx.spawner !is PlayerSpawner) return
         val playerUuid = (spawnEvent.ctx.spawner as PlayerSpawner).uuid
         val player = spawnEvent.ctx.world.getPlayerByUuid(playerUuid) ?: return
 
         val prevSparklesData = SparklesData.getFromPlayer(player)
         if (prevSparklesData.pos != null) {
+            if (spawnEvent.ctx.world.getBlockState(prevSparklesData.pos).block != ShinySparklesBlocks.SHINY_SPARKLE) {
+                SparklesData.modifyForPlayer(player) {
+                    it.pos = null
+                }
+                return
+            }
             println("Greedy")
             spawnEvent.cancel()
             return
         }
-
-        val pokemon = spawnEvent.entity.pokemon
-        if (!pokemon.shiny) return
 
         val world = spawnEvent.ctx.world
         val pos = spawnEvent.ctx.position
