@@ -20,14 +20,7 @@ object ShinySparkleSoulStealer {
         val player = spawnEvent.ctx.world.getPlayerByUuid(playerUuid) ?: return
 
         val prevSparklesData = SparklesData.getFromPlayer(player)
-        if (prevSparklesData.pos != null) {
-            if (spawnEvent.ctx.world.getBlockState(prevSparklesData.pos).block != ShinySparklesBlocks.SHINY_SPARKLE) {
-                SparklesData.modifyForPlayer(player) {
-                    it.pos = null
-                }
-                return
-            }
-            println("Greedy")
+        if (prevSparklesData.pos != null && spawnEvent.ctx.world.getBlockState(prevSparklesData.pos).block == ShinySparklesBlocks.SHINY_SPARKLE) {
             spawnEvent.cancel()
             return
         }
