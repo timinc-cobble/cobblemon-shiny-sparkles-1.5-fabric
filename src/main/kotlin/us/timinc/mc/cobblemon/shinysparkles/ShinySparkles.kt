@@ -27,4 +27,9 @@ object ShinySparkles : ModInitializer {
     fun modResource(name: String): Identifier {
         return Identifier(MOD_ID, name)
     }
+
+    fun debug(msg: String) {
+        if (!config.debug) return
+        println(msg)
+    }
 }
