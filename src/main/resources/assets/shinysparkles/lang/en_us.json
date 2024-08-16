@@ -1,4 +1,6 @@
 {
   "shinysparkles.block.sparkle.msg.notyours": "The sparkle calls out for %d.",
-  "shinysparkles.msg.emptyperson": "someone else"
+  "shinysparkles.msg.emptyperson": "someone else",
+  "shinysparkles.msg.commanddisabled": "This command is disabled.",
+  "shinysparkles.msg.nosparkleforyou": "You do not currently have a shiny sparkle."
 }

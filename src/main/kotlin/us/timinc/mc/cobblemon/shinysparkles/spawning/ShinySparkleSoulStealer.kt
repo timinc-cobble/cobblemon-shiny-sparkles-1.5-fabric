@@ -7,10 +7,8 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.block.Blocks
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
-import us.timinc.mc.cobblemon.shinysparkles.ShinySparkles
 import us.timinc.mc.cobblemon.shinysparkles.ShinySparkles.config
 import us.timinc.mc.cobblemon.shinysparkles.ShinySparkles.debug
-import us.timinc.mc.cobblemon.shinysparkles.blocks.ShinySparkle
 import us.timinc.mc.cobblemon.shinysparkles.blocks.ShinySparklesBlocks
 import us.timinc.mc.cobblemon.shinysparkles.blocks.blockentities.ShinySparkleBlockEntity
 import us.timinc.mc.cobblemon.shinysparkles.store.player.SparklesData
@@ -42,8 +40,8 @@ object ShinySparkleSoulStealer {
         val world = spawnEvent.ctx.world
         val pos = spawnEvent.ctx.position
 
-        var targetPos : BlockPos.Mutable = pos.mutableCopy()
-        var searchAllowance : Int = config.searchAllowance
+        var targetPos: BlockPos.Mutable = pos.mutableCopy()
+        var searchAllowance: Int = config.searchAllowance
         var currentOffset = 0
         while (world.getBlockState(targetPos).block != Blocks.AIR && searchAllowance > 0) {
             if (world.getBlockState(targetPos).block != Blocks.WATER) {
