@@ -63,8 +63,6 @@ object ShinySparkleSoulStealer {
         entity.life = config.sparkleLifespan
 
         SparklesData.modifyForPlayer(player) { it.pos = targetPos }
-
-        println(targetPos)
         spawnEvent.cancel()
     }
 }
