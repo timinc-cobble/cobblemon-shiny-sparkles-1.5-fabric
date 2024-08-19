@@ -48,9 +48,11 @@ class ShinySparkle : BlockWithEntity(
             return
         }
 
-        blockEntity.life--
-        if (blockEntity.life == 0) {
-            world.setBlockState(pos, Blocks.AIR.defaultState)
+        if (blockEntity.life > 0) {
+            blockEntity.life--
+            if (blockEntity.life == 0) {
+                world.setBlockState(pos, Blocks.AIR.defaultState)
+            }
         }
     }
 
