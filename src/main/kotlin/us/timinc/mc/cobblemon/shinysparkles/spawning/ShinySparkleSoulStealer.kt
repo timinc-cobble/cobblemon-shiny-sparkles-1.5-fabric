@@ -40,7 +40,7 @@ object ShinySparkleSoulStealer {
         val world = spawnEvent.ctx.world
         val pos = spawnEvent.ctx.position
 
-        var targetPos: BlockPos.Mutable = pos.mutableCopy()
+        val targetPos: BlockPos.Mutable = pos.mutableCopy()
         var searchAllowance: Int = config.searchAllowance
         var currentOffset = 0
         while (world.getBlockState(targetPos).block != Blocks.AIR && searchAllowance > 0) {
