@@ -60,7 +60,7 @@ object ShinySparkleSoulStealer {
         val entity = world.getBlockEntity(targetPos) as ShinySparkleBlockEntity
         entity.player = playerUuid
         entity.pokemon = pokemon.createPokemonProperties(PokemonPropertyExtractor.ALL)
-        entity.life = 3
+        entity.life = config.sparkleLifespan
 
         SparklesData.modifyForPlayer(player) { it.pos = targetPos }
 

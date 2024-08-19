@@ -5,4 +5,5 @@ class ShinySparklesConfig {
     val cancelMultiples: Boolean = false
     val debug: Boolean = false
     val enableFindCommand: Boolean = false
+    val sparkleLifespan: Int = -1
 }

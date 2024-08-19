@@ -20,6 +20,4 @@ object ShinySparklesBlocks {
             Registries.ITEM, modResource(name), BlockItem(block, Item.Settings())
         )
     }
-
-
 }
